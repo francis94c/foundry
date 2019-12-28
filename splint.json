@@ -1,0 +1,21 @@
+{
+  "name": "francis94c/foundry",
+  "type": "library",
+  "description": "Syntactic Sugar for Code Igniter's Database Forge. Used in Migration Classes, etc.",
+  "tags": [],
+  "page": "https://github.com/francis94c/foundry",
+  "authors": [
+    {
+      "name": "Francis Ilechukwu",
+      "email": "francis94c@gmail.com",
+      "page": "francis94c.github.io",
+      "role": "Developer"
+    }
+  ],
+  "php": ">=7.3",
+  "autoload": {
+    "libraries" : [
+      ["Foundry", "foundry"]
+    ]
+  }
+}
