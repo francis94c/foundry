@@ -28,7 +28,7 @@ class BluePrint
   public function &increments(string $field):FieldBluePrint
   {
     $fieldBluePrint = new FieldBluePrint($field, 'INT');
-    $fieldBluePrint->$autoIncrement = true;
+    $fieldBluePrint->autoIncrement = true;
     $fieldBluePrint->primaryKey = true;
     $this->fields[] = $fieldBluePrint;
     return $this->fields[count($this->fields) - 1];
@@ -102,6 +102,6 @@ class BluePrint
       get_instance()->dbforge->add_key($primaryKey, true);
     }
 
-    get_instance()->dbforge->create_table($table);
+    get_instance()->dbforge->create_table($table, true);
   }
 }
