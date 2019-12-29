@@ -26,11 +26,22 @@ class FieldBluePrint
    * @var [type]
    */
   public $unique;
+
+  /**
+   * [public description]
+   * @var [type]
+   */
   public $default;
+
+  /**
+   * [public description]
+   * @var [type]
+   */
   public $null = false;
   public $alter = false;
   public $autoIncrement = false;
   public $primaryKey = false;
+  public $foreignKey = [];
 
   /**
    * [__construct description]
@@ -57,6 +68,17 @@ class FieldBluePrint
   }
 
   /**
+   * [primary description]
+   * @date   2019-12-29
+   * @return FieldBluePrint [description]
+   */
+  public function primary():FieldBluePrint
+  {
+    $this->primaryKey = true;
+    return $this;
+  }
+
+  /**
    * [unique description]
    * @date   2019-12-28
    * @return FieldBluePrint [description]
@@ -79,6 +101,11 @@ class FieldBluePrint
     return $this;
   }
 
+  /**
+   * [build description]
+   * @date   2019-12-29
+   * @return array      [description]
+   */
   public function build():array
   {
     $field = ['type' => $this->type];
