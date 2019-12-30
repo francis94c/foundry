@@ -31,6 +31,12 @@ class Foundry
     get_instance()->load->package('splint/platform');
   }
 
+  /**
+   * [build description]
+   * @date  2019-12-29
+   * @param string     $table         [description]
+   * @param callable   $buildCallable [description]
+   */
   public static function build(string $table, callable $buildCallable):void
   {
     $blueprint = new BluePrint();
@@ -38,5 +44,15 @@ class Foundry
     $buildCallable($blueprint);
 
     $blueprint->execute($table);
+  }
+
+  /**
+   * [drop description]
+   * @date  2019-12-29
+   * @param string     $table [description]
+   */
+  public function drop(string $table):void
+  {
+    $this->dbforge->drop_table($table);
   }
 }
