@@ -159,8 +159,20 @@ class BluePrint
   public function &enum(string $field, array $values):FieldBluePrint
   {
     $fieldBluePrint = new FieldBluePrint($field, 'ENUM(\''.implode("','", $values).'\')');
-    $this->fields[] = $fieldBluePrint;
-    return $this->fields[count($this->fields) - 1];
+    return $this->fields[] = $fieldBluePrint;
+  }
+
+  /**
+   * [set description]
+   * @date   2019-12-30
+   * @param  string         $field  [description]
+   * @param  array          $values [description]
+   * @return FieldBluePrint         [description]
+   */
+  public function &set(string $field, array $values):FieldBluePrint
+  {
+    $fieldBluePrint = new FieldBluePrint($field, 'SET(\''.implode("','", $values).'\')');
+    return $this->fields[] = $fieldBluePrint;
   }
 
   /**
@@ -256,6 +268,66 @@ class BluePrint
   public function &geometry(string $field):FieldBluePrint
   {
     $fieldBluePrint = new FieldBluePrint($field, 'GEOMETRY');
+    return $this->fields[] = $fieldBluePrint;
+  }
+
+  /**
+   * [geometryCollection description]
+   * @date   2019-12-30
+   * @param  string         $field [description]
+   * @return FieldBluePrint        [description]
+   */
+  public function &geometryCollection(string $field):FieldBluePrint
+  {
+    $fieldBluePrint = new FieldBluePrint($field, 'GEOMETRYCOLLECTION');
+    return $this->fields[] = $fieldBluePrint;
+  }
+
+  /**
+   * [ipAddress description]
+   * @date   2019-12-30
+   * @param  string         $field [description]
+   * @return FieldBluePrint        [description]
+   */
+  public function &ipAddress(string $field):FieldBluePrint
+  {
+    $fieldBluePrint = new FieldBluePrint($field, 'INT');
+    return $this->fields[] = $fieldBluePrint;
+  }
+
+  /**
+   * [lineString description]
+   * @date   2019-12-30
+   * @param  string         $field [description]
+   * @return FieldBluePrint        [description]
+   */
+  public function &lineString(string $field):FieldBluePrint
+  {
+    $fieldBluePrint = new FieldBluePrint($field, 'LINESTRING');
+    return $this->fields[] = $fieldBluePrint;
+  }
+
+  /**
+   * [longText description]
+   * @date   2019-12-30
+   * @param  string         $field [description]
+   * @return FieldBluePrint        [description]
+   */
+  public function &longText(string $field):FieldBluePrint
+  {
+    $fieldBluePrint = new FieldBluePrint($field, 'LONGTEXT');
+    return $this->fields[] = $fieldBluePrint;
+  }
+
+  /**
+   * [json description]
+   * @date   2019-12-30
+   * @param  string         $field [description]
+   * @return FieldBluePrint        [description]
+   */
+  public function &json(string $field):FieldBluePrint
+  {
+    $fieldBluePrint = new FieldBluePrint($field, 'JSON');
     return $this->fields[] = $fieldBluePrint;
   }
 
