@@ -202,8 +202,37 @@ class BluePrint
   {
     $fieldBluePrint = new FieldBluePrint($field, 'DOUBLE');
     if ($m && $d) $fieldBluePrint->constraint = "$m,$d";
-    $this->fields[] = $fieldBluePrint;
-    return $this->fields[count($this->fields) - 1];
+    return $this->fields[] = $fieldBluePrint;
+  }
+
+  /**
+   * [decimal description]
+   * @date   2019-12-30
+   * @param  string         $field [description]
+   * @param  [type]         $m     [description]
+   * @param  [type]         $d     [description]
+   * @return FieldBluePrint        [description]
+   */
+  public function &decimal(string $field, ?int $m=null, ?int $d=null):FieldBluePrint
+  {
+    $fieldBluePrint = new FieldBluePrint($field, 'DECIMAL');
+    if ($m && $d) $fieldBluePrint->constraint = "$m,$d";
+    return $this->fields[] = $fieldBluePrint;
+  }
+
+  /**
+   * [float description]
+   * @date   2019-12-30
+   * @param  string         $field [description]
+   * @param  [type]         $m     [description]
+   * @param  [type]         $d     [description]
+   * @return FieldBluePrint        [description]
+   */
+  public function &float(string $field, ?int $m=null, ?int $d=null):FieldBluePrint
+  {
+    $fieldBluePrint = new FieldBluePrint($field, 'FLOAT');
+    if ($m && $d) $fieldBluePrint->constraint = "$m,$d";
+    return $this->fields[] = $fieldBluePrint;
   }
 
   /**
@@ -215,8 +244,31 @@ class BluePrint
   public function &tinyInteger(string $field):FieldBluePrint
   {
     $fieldBluePrint = new FieldBluePrint($field, 'TINYINT');
-    $this->fields[] = $fieldBluePrint;
-    return $this->fields[count($this->fields) - 1];
+    return $this->fields[] = $fieldBluePrint;
+  }
+
+  /**
+   * [geometry description]
+   * @date   2019-12-30
+   * @param  string         $field [description]
+   * @return FieldBluePrint        [description]
+   */
+  public function &geometry(string $field):FieldBluePrint
+  {
+    $fieldBluePrint = new FieldBluePrint($field, 'GEOMETRY');
+    return $this->fields[] = $fieldBluePrint;
+  }
+
+  /**
+   * [point description]
+   * @date   2019-12-30
+   * @param  string         $field [description]
+   * @return FieldBluePrint        [description]
+   */
+  public function &point(string $field):FieldBluePrint
+  {
+    $fieldBluePrint = new FieldBluePrint($field, 'POINT');
+    return $this->fields[] = $fieldBluePrint;
   }
 
   /**
