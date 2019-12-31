@@ -27,6 +27,8 @@ class BluePrint
    */
   private $compoundKeys = [];
 
+  private $comment;
+
   /**
    * [increments description]
    * @date   2019-12-28
@@ -38,7 +40,8 @@ class BluePrint
     $fieldBluePrint = new FieldBluePrint($field, 'INT');
     $fieldBluePrint->autoIncrement = true;
     $fieldBluePrint->primaryKey = true;
-    return $this->fields[] = $fieldBluePrint;
+    $this->fields[] = $fieldBluePrint;
+    return $this->fields[count($this->fields) - 1];
   }
   /**
    * [bigIncrements description]
@@ -64,7 +67,8 @@ class BluePrint
    */
   public function &string(string $field, int $length=100):FieldBluePrint
   {
-    return $this->fields[] = new FieldBluePrint($field, 'VARCHAR', $length);
+    $this->fields[] = new FieldBluePrint($field, 'VARCHAR', $length);
+    return $this->fields[count($this->fields) - 1];
   }
 
   /**
@@ -76,7 +80,8 @@ class BluePrint
    */
   public function &char(string $field, int $length=50):FieldBluePrint
   {
-    return $this->fields[] = new FieldBluePrint($field, 'CHAR', $length);
+    $this->fields[] = new FieldBluePrint($field, 'CHAR', $length);
+    return $this->fields[count($this->fields) - 1];
   }
 
   /**
@@ -87,7 +92,8 @@ class BluePrint
    */
   public function &date(string $field):FieldBluePrint
   {
-    return $this->fields[] = new FieldBluePrint($field, 'DATE');
+    $this->fields[] = new FieldBluePrint($field, 'DATE');
+    return $this->fields[count($this->fields) - 1];
   }
 
   /**
@@ -98,7 +104,8 @@ class BluePrint
    */
   public function &dateTime(string $field):FieldBluePrint
   {
-    return $this->fields[] = new FieldBluePrint($field, 'DATE', $length);
+    $this->fields[] = new FieldBluePrint($field, 'DATETIME');
+    return $this->fields[count($this->fields) - 1];
   }
 
   /**
@@ -112,7 +119,8 @@ class BluePrint
   {
     $fieldBluePrint = new FieldBluePrint($field, 'INT');
     if ($length) $fieldBluePrint->constraint = $length;
-    return $this->fields[] = $fieldBluePrint;
+    $this->fields[] = $fieldBluePrint;
+    return $this->fields[count($this->fields) - 1];
   }
 
   /**
@@ -123,7 +131,8 @@ class BluePrint
    */
   public function &binary(string $field):FieldBluePrint
   {
-    return $this->fields[] = new FieldBluePrint($field, 'BLOB');
+    $this->fields[] = new FieldBluePrint($field, 'BLOB');
+    return $this->fields[count($this->fields) - 1];
   }
 
   /**
@@ -134,7 +143,8 @@ class BluePrint
    */
   public function &boolean(string $field):FieldBluePrint
   {
-    return $this->fields[] = new FieldBluePrint($field, 'BOOLEAN');
+    $this->fields[] = new FieldBluePrint($field, 'BOOLEAN');
+    return $this->fields[count($this->fields) - 1];
   }
 
   /**
@@ -146,6 +156,42 @@ class BluePrint
   public function &bigInteger(string $field):FieldBluePrint
   {
     $this->fields[] = new FieldBluePrint($field, 'BIGINT');
+    $this->fields[count($this->fields) - 1];
+    return $this->fields[count($this->fields) - 1];
+  }
+
+  /**
+   * [timestamp description]
+   * @date   2019-12-30
+   * @param  string         $field [description]
+   * @return FieldBluePrint        [description]
+   */
+  public function &timestamp(string $field):FieldBluePrint
+  {
+    $this->fields[] = new FieldBluePrint($field, 'TIMESTAMP');
+    return $this->fields[count($this->fields) - 1];
+  }
+
+  /**
+   * [timestamps description]
+   * @date 2019-12-30
+   */
+  public function timestamps():void
+  {
+    ($this->fields[] = new FieldBluePrint('created_at', 'TIMESTAMP'))->useCurrent()->nullable(false);
+    $fieldBluePrint = new FieldBluePrint('updated_at', 'TIMESTAMP ON UPDATE CURRENT_TIMESTAMP');
+    $this->fields[] = $fieldBluePrint->useCurrent()->nullable(false);
+  }
+
+  /**
+   * [text description]
+   * @date   2019-12-30
+   * @param  string         $field [description]
+   * @return FieldBluePrint        [description]
+   */
+  public function &text(string $field):FieldBluePrint
+  {
+    $this->fields[] = new FieldBluePrint($field, 'TEXT');
     return $this->fields[count($this->fields) - 1];
   }
 
@@ -158,8 +204,10 @@ class BluePrint
    */
   public function &enum(string $field, array $values):FieldBluePrint
   {
-    $fieldBluePrint = new FieldBluePrint($field, 'ENUM(\''.implode("','", $values).'\')');
-    return $this->fields[] = $fieldBluePrint;
+    //$fieldBluePrint = new FieldBluePrint($field, 'ENUM(\''.implode("','", $values).'\')');
+    $fieldBluePrint = new FieldBluePrint($field, 'ENUM', $values);
+    $this->fields[] = $fieldBluePrint;
+    return $this->fields[count($this->fields) - 1];
   }
 
   /**
@@ -171,8 +219,10 @@ class BluePrint
    */
   public function &set(string $field, array $values):FieldBluePrint
   {
-    $fieldBluePrint = new FieldBluePrint($field, 'SET(\''.implode("','", $values).'\')');
-    return $this->fields[] = $fieldBluePrint;
+    //$fieldBluePrint = new FieldBluePrint($field, 'SET(\''.implode("','", $values).'\')');
+    $fieldBluePrint = new FieldBluePrint($field, 'SET', $values);
+    $this->fields[] = $fieldBluePrint;
+    return $this->fields[count($this->fields) - 1];
   }
 
   /**
@@ -184,7 +234,7 @@ class BluePrint
    *
    * @return FieldBluePrint        [description]
    */
-  public function &primary($field):?FieldBluePrint
+  public function &primary($field):FieldBluePrint
   {
     if (is_scalar($field) && is_string($field)) {
       $this->primaryKeys[] = $field;
@@ -199,7 +249,7 @@ class BluePrint
       throw new Exception("Invalid Data Type, Function 'primary' expects string or array as argument.");
     }
 
-    return null;
+    throw new Exception("Could not set primary key on '$field' as it was not found.");
   }
 
   /**
@@ -214,7 +264,8 @@ class BluePrint
   {
     $fieldBluePrint = new FieldBluePrint($field, 'DOUBLE');
     if ($m && $d) $fieldBluePrint->constraint = "$m,$d";
-    return $this->fields[] = $fieldBluePrint;
+    $this->fields[] = $fieldBluePrint;
+    return $this->fields[count($this->fields) - 1];
   }
 
   /**
@@ -229,7 +280,8 @@ class BluePrint
   {
     $fieldBluePrint = new FieldBluePrint($field, 'DECIMAL');
     if ($m && $d) $fieldBluePrint->constraint = "$m,$d";
-    return $this->fields[] = $fieldBluePrint;
+    $this->fields[] = $fieldBluePrint;
+    return $this->fields[count($this->fields) - 1];
   }
 
   /**
@@ -244,7 +296,8 @@ class BluePrint
   {
     $fieldBluePrint = new FieldBluePrint($field, 'FLOAT');
     if ($m && $d) $fieldBluePrint->constraint = "$m,$d";
-    return $this->fields[] = $fieldBluePrint;
+    $this->fields[] = $fieldBluePrint;
+    return $this->fields[count($this->fields) - 1];
   }
 
   /**
@@ -256,7 +309,8 @@ class BluePrint
   public function &tinyInteger(string $field):FieldBluePrint
   {
     $fieldBluePrint = new FieldBluePrint($field, 'TINYINT');
-    return $this->fields[] = $fieldBluePrint;
+    $this->fields[] = $fieldBluePrint;
+    return $this->fields[count($this->fields) - 1];
   }
 
   /**
@@ -268,7 +322,8 @@ class BluePrint
   public function &geometry(string $field):FieldBluePrint
   {
     $fieldBluePrint = new FieldBluePrint($field, 'GEOMETRY');
-    return $this->fields[] = $fieldBluePrint;
+    $this->fields[] = $fieldBluePrint;
+    return $this->fields[count($this->fields) - 1];
   }
 
   /**
@@ -280,7 +335,8 @@ class BluePrint
   public function &geometryCollection(string $field):FieldBluePrint
   {
     $fieldBluePrint = new FieldBluePrint($field, 'GEOMETRYCOLLECTION');
-    return $this->fields[] = $fieldBluePrint;
+    $this->fields[] = $fieldBluePrint;
+    return $this->fields[count($this->fields) - 1];
   }
 
   /**
@@ -292,7 +348,8 @@ class BluePrint
   public function &ipAddress(string $field):FieldBluePrint
   {
     $fieldBluePrint = new FieldBluePrint($field, 'INT');
-    return $this->fields[] = $fieldBluePrint;
+    $this->fields[] = $fieldBluePrint;
+    return $this->fields[count($this->fields) - 1];
   }
 
   /**
@@ -304,7 +361,8 @@ class BluePrint
   public function &lineString(string $field):FieldBluePrint
   {
     $fieldBluePrint = new FieldBluePrint($field, 'LINESTRING');
-    return $this->fields[] = $fieldBluePrint;
+    $this->fields[] = $fieldBluePrint;
+    return $this->fields[count($this->fields) - 1];
   }
 
   /**
@@ -316,7 +374,8 @@ class BluePrint
   public function &longText(string $field):FieldBluePrint
   {
     $fieldBluePrint = new FieldBluePrint($field, 'LONGTEXT');
-    return $this->fields[] = $fieldBluePrint;
+    $this->fields[] = $fieldBluePrint;
+    return $this->fields[count($this->fields) - 1];
   }
 
   /**
@@ -328,7 +387,31 @@ class BluePrint
   public function &json(string $field):FieldBluePrint
   {
     $fieldBluePrint = new FieldBluePrint($field, 'JSON');
-    return $this->fields[] = $fieldBluePrint;
+    $this->fields[] = $fieldBluePrint;
+    return $this->fields[count($this->fields) - 1];
+  }
+
+  /**
+   * [comment description]
+   * @date   2019-12-31
+   * @param  string     $tableComment  [description]
+   * @param  [type]     $columnComment [description]
+   * @return [type]                    [description]
+   */
+  public function &comment(string $tableComment, string $columnComment=null)
+  {
+    if (!$columnComment) {
+      $this->comment = $tableComment;
+      return $this;
+    }
+
+    for ($x = 0; $x < count($this->fields); $x++) {
+      if ($this->fields[$x]->name == $tableComment) {
+        return $this->fields[$x]->comment($columnComment);
+      }
+    }
+
+    throw new Exception("Comment not set, Could not find field $tableComment");
   }
 
   /**
@@ -340,7 +423,8 @@ class BluePrint
   public function &point(string $field):FieldBluePrint
   {
     $fieldBluePrint = new FieldBluePrint($field, 'POINT');
-    return $this->fields[] = $fieldBluePrint;
+    $this->fields[] = $fieldBluePrint;
+    return $this->fields[count($this->fields) - 1];
   }
 
   /**
@@ -349,7 +433,7 @@ class BluePrint
    * @param  string         $field [description]
    * @return FieldBluePrint        [description]
    */
-  public function &foreign(string $field):?FieldBluePrint
+  public function &foreign(string $field):FieldBluePrint
   {
     for ($x = 0; $x < count($this->fields); $x++) {
       if ($this->fields[$x]->name == $field) {
@@ -358,7 +442,7 @@ class BluePrint
       }
     }
 
-    return null;
+    throw new Exception("Could not set Foreign Key, Field: '$field' not found.");
   }
 
   /**
@@ -379,7 +463,7 @@ class BluePrint
    */
   public function execute(string $table)
   {
-    $this->primaryKeys = array_unique($this->primaryKey);
+    $this->primaryKeys = array_unique($this->primaryKeys);
 
     $fields = [];
 
@@ -405,8 +489,12 @@ class BluePrint
       get_instance()->dbforge->add_field($foreignKey);
     }
 
-    get_instance()->dbforge->create_table($table, true, [
+    $tableMetaData = [
       'ENGINE' => $this->engine
-    ]);
+    ];
+
+    if ($this->comment) $tableMetaData['COMMENT'] = "'$this->comment'";
+
+    get_instance()->dbforge->create_table($table, true, $tableMetaData);
   }
 }

@@ -50,21 +50,28 @@ class FieldBluePrint
    * @param string     $name       [description]
    * @param [type]     $constraint [description]
    */
-  function __construct(string $name, string $type, ?int $constraint=null)
+  function __construct(string $name, string $type, $constraint=null)
   {
     $this->name = $name;
     $this->type = $type;
     $this->constraint = $constraint;
   }
 
+  public function comment(string $comment):FieldBluePrint
+  {
+    $this->type .= " COMMENT '$comment'";
+    return $this;
+  }
+
   /**
    * [nullable description]
-   * @date   2019-12-28
-   * @return FieldBluePrint [description]
+   * @date   2019-12-30
+   * @param  boolean        $value [description]
+   * @return FieldBluePrint        [description]
    */
-  public function nullable():FieldBluePrint
+  public function nullable($value=true):FieldBluePrint
   {
-    $this->null = true;
+    $this->null = $value;
     return $this;
   }
 
@@ -76,6 +83,17 @@ class FieldBluePrint
   public function primary():FieldBluePrint
   {
     $this->primaryKey = true;
+    return $this;
+  }
+
+  /**
+   * [autoIncrement description]
+   * @date   2019-12-30
+   * @return FieldBluePrint [description]
+   */
+  public function autoIncrement():FieldBluePrint
+  {
+    $this->autoIncrement = true;
     return $this;
   }
 
@@ -166,11 +184,14 @@ class FieldBluePrint
    * @date   2019-12-30
    * @return FieldBluePrint [description]
    */
-  public function &useCurrent():FieldBluePrint
+  public function useCurrent():FieldBluePrint
   {
-    if ($this->type == 'DATE') {
-      $this->default('CURRENT_TIMESTAMP');
+    if (strpos($this->type, 'TIMESTAMP') !== false || strpos($this->type, 'DATETIME') !== false) {
+      $this->type .= ' DEFAULT CURRENT_TIMESTAMP';
+    } else {
+      throw new Exception('Tried calling useCurrent() on a field with type other than TIMESTAMP or DATETIME');
     }
+    return $this;
   }
 
   /**
@@ -181,6 +202,17 @@ class FieldBluePrint
   public function unique():FieldBluePrint
   {
     $this->unique = true;
+    return $this;
+  }
+
+  /**
+   * [unsigned description]
+   * @date   2019-12-30
+   * @return FieldBluePrint [description]
+   */
+  public function unsigned():FieldBluePrint
+  {
+    $this->unsigned = true;
     return $this;
   }
 
@@ -203,11 +235,13 @@ class FieldBluePrint
    */
   public function build():array
   {
-    $field = ['type' => $this->type];
+    $field = [
+      'type' => $this->type,
+      'null' => $this->null
+    ];
 
     if ($this->constraint) $field['constraint'] = $this->constraint;
     if ($this->autoIncrement) $field['auto_increment'] = true;
-    if (!$this->null) $field['null'] = false; // Default True;
     if (!$this->unsigned) $field['unsigned'] = false; // Default True.
     if ($this->unique) $field['unique'] = true;
     if ($this->default) $field['default'] = $this->default;
