@@ -59,6 +59,7 @@ class FieldBluePrint
 
   public function comment(string $comment):FieldBluePrint
   {
+    $comment = str_replace("'", "\\'", $comment);
     $this->type .= " COMMENT '$comment'";
     return $this;
   }
