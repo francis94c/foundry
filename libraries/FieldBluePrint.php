@@ -79,11 +79,12 @@ class FieldBluePrint
   /**
    * [primary description]
    * @date   2019-12-29
-   * @return FieldBluePrint [description]
+   * @param  bool           $primary [description]
+   * @return FieldBluePrint          [description]
    */
-  public function primary():FieldBluePrint
+  public function primary($primary=true):FieldBluePrint
   {
-    $this->primaryKey = true;
+    $this->primaryKey = $primary;
     return $this;
   }
 
@@ -191,6 +192,21 @@ class FieldBluePrint
       $this->type .= ' DEFAULT CURRENT_TIMESTAMP';
     } else {
       throw new Exception('Tried calling useCurrent() on a field with type other than TIMESTAMP or DATETIME');
+    }
+    return $this;
+  }
+
+  /**
+   * [useCurrentOnUpdate description]
+   * @date   2020-03-28
+   * @return FieldBluePrint [description]
+   */
+  public function useCurrentOnUpdate():FieldBluePrint
+  {
+    if (strpos($this->type, 'TIMESTAMP') !== false || strpos($this->type, 'DATETIME') !== false) {
+      $this->type .= ' ON UPDATE CURRENT_TIMESTAMP';
+    } else {
+      throw new Exception('Tried calling useCurrentOnUpdate() on a field with type other than TIMESTAMP or DATETIME');
     }
     return $this;
   }
