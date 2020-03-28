@@ -27,7 +27,17 @@ class BluePrint
    */
   private $compoundKeys = [];
 
+  /**
+   * [private description]
+   * @var [type]
+   */
   private $comment;
+
+  /**
+   * [private description]
+   * @var [type]
+   */
+  private $indices = [];
 
   /**
    * [increments description]
@@ -69,6 +79,22 @@ class BluePrint
   {
     $this->fields[] = new FieldBluePrint($field, 'VARCHAR', $length);
     return $this->fields[count($this->fields) - 1];
+  }
+
+  /**
+   * [index description]
+   * @date   2020-01-06
+   * @param  [type]         $index [description]
+   * @return FieldBluePrint        [description]
+   */
+  public function &index($index):FieldBluePrint
+  {
+    if (is_array($index)) {
+      array_merge($this->indices, $index);
+    } else {
+      $this->indices[] = $index;
+    }
+    return $this;
   }
 
   /**
@@ -232,9 +258,9 @@ class BluePrint
    *
    * @throws Exception      When given data type is invalid.
    *
-   * @return FieldBluePrint        [description]
+   * @return FieldBluePrint|BluePrint [description]
    */
-  public function &primary($field):FieldBluePrint
+  public function &primary($field)
   {
     if (is_scalar($field) && is_string($field)) {
       $this->primaryKeys[] = $field;
@@ -244,7 +270,8 @@ class BluePrint
         }
       }
     } elseif (is_array($field)) {
-      $this->compoundKeys[] = $field;
+      $this->primaryKeys = array_merge($this->primaryKeys, $field);
+      return $this;
     } else {
       throw new Exception("Invalid Data Type, Function 'primary' expects string or array as argument.");
     }
