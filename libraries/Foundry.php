@@ -39,9 +39,25 @@ class Foundry
    */
   public static function build(string $table, callable $buildCallable):void
   {
-    $blueprint = new BluePrint();
+    $blueprint = new BluePrint(false);
 
     $buildCallable($blueprint);
+
+    $blueprint->execute($table);
+  }
+
+  /**
+   * [update description]
+   * @date  2020-06-16
+   * @method update
+   * @param  string   $table          [description]
+   * @param  callable $updateCallable [description]
+   */
+  public static function update(string $table, callable $updateCallable):void
+  {
+    $blueprint = new BluePrint(true);
+
+    $updateCallable($blueprint);
 
     $blueprint->execute($table);
   }

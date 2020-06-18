@@ -57,6 +57,13 @@ class FieldBluePrint
     $this->constraint = $constraint;
   }
 
+  /**
+   * Column Comment
+   * @method comment
+   * @date   2020-06-17
+   * @param  string     $comment [description]
+   * @return FieldBluePrint [description]
+   */
   public function comment(string $comment):FieldBluePrint
   {
     $comment = str_replace("'", "\\'", $comment);

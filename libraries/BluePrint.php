@@ -7,6 +7,12 @@ class BluePrint
    * [private description]
    * @var [type]
    */
+  private $modify;
+
+  /**
+   * [private description]
+   * @var [type]
+   */
   private $fields = [];
 
   /**
@@ -38,6 +44,22 @@ class BluePrint
    * @var [type]
    */
   private $indices = [];
+
+  /**
+   * [private description]
+   * @var array
+   */
+  private $columnsToDrop = [];
+
+  /**
+   * [__construct description]
+   * @method __construct
+   * @param  bool        $modify [description]
+   */
+  public function __construct(bool $modify=false)
+  {
+    $this->modify = $modify;
+  }
 
   /**
    * [increments description]
@@ -473,6 +495,21 @@ class BluePrint
   }
 
   /**
+   * [dropColumn description]
+   * @method dropColumn
+   * @date   2020-06-17
+   * @param  [type]     $column [description]
+   * @return BluePrint  [description]
+   */
+  public function dropColumn($column):BluePrint
+  {
+    if (is_array($column)) $this->columnsToDrop = array_merge($this->columnsToDrop, $column);
+    if (is_scalar($column)) $this->columnsToDrop[] = $column;
+
+    return $this;
+  }
+
+  /**
    * [engine description]
    * @date  2019-12-29
    * @param string     $engine [description]
@@ -489,6 +526,20 @@ class BluePrint
    * @return [type]            [description]
    */
   public function execute(string $table)
+  {
+    if (!$this->modify) {
+      $this->create_table($table);
+    } else {
+      $this->modify_table($table);
+    }
+  }
+
+  /**
+   * [create_table description]
+   * @method create_table
+   * @param  string       $table [description]
+   */
+  private function create_table(string $table):void
   {
     $this->primaryKeys = array_unique($this->primaryKeys);
 
@@ -523,5 +574,23 @@ class BluePrint
     if ($this->comment) $tableMetaData['COMMENT'] = "'$this->comment'";
 
     get_instance()->dbforge->create_table($table, true, $tableMetaData);
+  }
+
+  /**
+   * [modify_table description]
+   * @method modify_table
+   * @param  string       $table [description]
+   */
+  private function modify_table(string $table):void
+  {
+    $fields = [];
+
+    foreach($this->columnsToDrop as $column) {
+      get_instance()->dbforge->drop_column($table, $column);
+    }
+
+    foreach ($this->fields as $field) $fields[$field->name] = $field->build();
+
+    get_instance()->dbforge->add_column($table, $fields);
   }
 }
