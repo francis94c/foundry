@@ -19,6 +19,12 @@ class BluePrint
    * [private description]
    * @var [type]
    */
+  private $columnRenames = [];
+
+  /**
+   * [private description]
+   * @var [type]
+   */
   private $engine = 'InnoDB';
 
   /**
@@ -510,6 +516,19 @@ class BluePrint
   }
 
   /**
+   * [renameColumn description]
+   * @method renameColumn
+   * @date   2020-06-18
+   * @param  string       $oldName [description]
+   * @param  string       $newName [description]
+   * @return BluePrint    [description]
+   */
+  public function renameColumn(string $oldName, string $newName):BluePrint
+  {
+    $this->columnRenames[$oldName] = ['name' => $newName];
+  }
+
+  /**
    * [engine description]
    * @date  2019-12-29
    * @param string     $engine [description]
@@ -585,12 +604,30 @@ class BluePrint
   {
     $fields = [];
 
+    // Drops
     foreach($this->columnsToDrop as $column) {
       get_instance()->dbforge->drop_column($table, $column);
     }
 
-    foreach ($this->fields as $field) $fields[$field->name] = $field->build();
+    $toModify = [];
 
+    foreach ($this->fields as $field) {
+      if ($field->modify) {
+        $toModify[$field->name] = $field->build();
+        continue;
+      }
+      $fields[$field->name] = $field->build();
+    }
+
+    // Modify
+    get_instance()->dbforge->modify_column($table, $toModify);
+
+    // Rename
+    if (count($this->columnRenames) > 0) {
+      get_instance()->dbforge->modify_column($table, $this->columnRenames);
+    }
+
+    // Add
     get_instance()->dbforge->add_column($table, $fields);
   }
 }

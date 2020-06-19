@@ -13,6 +13,12 @@ class FieldBluePrint
    * [public description]
    * @var [type]
    */
+  public $modify = false;
+
+  /**
+   * [public description]
+   * @var [type]
+   */
   public $type;
 
   /**
@@ -249,6 +255,18 @@ class FieldBluePrint
   public function default($default):FieldBluePrint
   {
     $this->default = $default;
+    return $this;
+  }
+
+  /**
+   * [change description]
+   * @method change
+   * @date   2020-06-18
+   * @return FieldBluePrint [description]
+   */
+  public function change():FieldBluePrint
+  {
+    $this->modify = true;
     return $this;
   }
 
