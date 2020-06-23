@@ -620,7 +620,9 @@ class BluePrint
     }
 
     // Modify
-    get_instance()->dbforge->modify_column($table, $toModify);
+    if (count($toModify) > 0) {
+      get_instance()->dbforge->modify_column($table, $toModify);
+    }
 
     // Rename
     if (count($this->columnRenames) > 0) {
