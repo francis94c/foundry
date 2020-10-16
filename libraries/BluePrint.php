@@ -90,7 +90,7 @@ class BluePrint
   public function &bigIncrements(string $field):FieldBluePrint
   {
     $fieldBluePrint = new FieldBluePrint($field, 'BIGINT');
-    $fieldBluePrint->$autoIncrement = true;
+    $fieldBluePrint->autoIncrement = true;
     $fieldBluePrint->primaryKey = true;
     $this->fields[] = $fieldBluePrint;
     return $this->fields[count($this->fields) - 1];
