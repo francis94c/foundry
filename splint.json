@@ -17,5 +17,7 @@
     "libraries" : [
       ["Foundry", "foundry"]
     ]
-  }
+  },
+  "root": "libraries",
+  "psr4-name": "Foundry" 
 }
